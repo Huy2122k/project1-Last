@@ -1,0 +1,307 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  background-color: #ffffff;
+  color: #fff;
+}
+
+.sidebar {
+  overflow: auto;
+  height: 100vh;
+  border-left: 1px solid #eee;
+  color: #888888;
+  background: #ffffff;
+}
+
+.sidebar__highlights {
+  list-style: none;
+  padding: 0;
+  margin-top: 0;
+}
+
+.sidebar__highlights ul .sidebar__highlight {
+  background-color: #ffffff;
+}
+
+.collapse {
+  display: none;
+}
+
+.collapse.show {
+  display: block;
+}
+
+.title-type {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 30px;
+  cursor: pointer;
+  background-color: #fbfbfb;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.title__sidebar {
+  color: #fff;
+  padding: 16px 0;
+  font-weight: bold;
+  background-color: #c20d2e;
+  text-align: center;
+}
+.title__comment {
+  color: #fff;
+  padding: 16px 0;
+  font-weight: bold;
+  background-color: #c20d2e;
+  text-align: center;
+}
+
+.highlight__location {
+  margin-top: 0.5rem;
+  text-align: right;
+  font-size: 10px;
+}
+
+.highlight__image {
+  overflow: auto;
+  max-width: 300px;
+  border: 1px dashed;
+}
+
+.sidebar__highlight {
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: background 140ms ease-in;
+  position: relative;
+}
+
+.sidebar__highlight:hover {
+  background: rgba(58, 56, 52, 0.08);
+}
+
+.sidebar__highlight.active {
+  background-color: #fceaea;
+  color: #e42927;
+}
+
+.sidebar__highlight .float-left {
+  float: left;
+  width: 80%;
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.sidebar__highlight .float-right {
+  float: right;
+  width: 20%;
+  text-align: center;
+  font-size: 14px;
+}
+
+.clearfix {
+  overflow: auto;
+}
+
+.item_document_popup {
+  background: #fff;
+  box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+  border-radius: 5px;
+  position: absolute;
+  z-index: 20;
+  top: 20%;
+  left: 15%;
+  right: 30%;
+}
+.item_document_popup_2 {
+  background: #fff;
+  box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+  border-radius: 5px;
+  position: absolute;
+  z-index: 20;
+  top: 30%;
+  left: 15%;
+  right: 30%;
+}
+
+.backpop{
+  background: rgba(0,0,0,0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 25;
+  width: 100%;
+  bottom: 0;
+}
+
+.element-center{
+  display: flex;
+  justify-content: center;
+}
+
+.text-center{
+  text-align:center;
+}
+
+.link_popup {
+  background-color: #eee;
+  padding: 16px 20px;
+  border-radius: 5px 5px 0 0;
+  position: relative;
+}
+
+.link_popup::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.link_popup .float-left {
+  width: 80%;
+}
+
+.link_popup .float-left p{
+  margin:0;
+  cursor: pointer;
+}
+
+.link_popup .float-left {
+  overflow-wrap: break-word;
+}
+
+.link_popup .float-right {
+  margin-right: 50px;
+}
+
+.link_popup .icon-close-popup {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.content_popup {
+  padding: 10px 20px;
+  color: #000;
+  font-size: 14px;
+  height: 88px;
+  overflow: hidden;
+}
+
+.link_popup a {
+  color: red;
+}
+
+a {
+  color: #1f72cc;
+}
+
+blockquote {
+  padding: 0;
+  margin: 0;
+  quotes: "\201c" "\201d";
+}
+blockquote:before {
+  content: open-quote;
+}
+blockquote:after {
+  content: close-quote;
+}
+
+.footer-show {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  height: 36px;
+  background-color: #e9eaec;
+  color: #000;
+}
+
+.footer-left {
+  display: flex;
+  float: left;
+  width: 50%;
+  margin-left: 10%;
+}
+
+.footer-right {
+  float: right;
+  width: 20%;
+  margin-left: 10%;
+  margin-right: 10%;
+  line-height: 36px;
+  text-align: right;
+  font-size: 14px;
+}
+
+.footer-right img {
+  max-width: 24px;
+  margin-top: 6px;
+  margin-right: 5px;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.bg-item-footer {
+  width: 30px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.item-color-footer {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  flex: 1;
+  font-size: 14px;
+}
+
+.bg-small {
+  background-color: #ffe28f;
+}
+
+.bg-medium {
+  background-color: green;
+}
+
+.bg-large {
+  background-color: red;
+}
+
+.img-fluid {
+  max-width: 100%;
+}
+
+.mr-2 {
+  margin-right: 8px;
+}
+
+.mr-1 {
+  margin-right: 4px;
+}
+
+.mr-3 {
+  margin-right: 16px;
+}
+
+.icon-arrow {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.App {
+  color: #000;
+}
