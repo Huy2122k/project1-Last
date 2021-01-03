@@ -6,8 +6,8 @@ import URLSearchParams from "url-search-params";
 import Sidebar from "./Sidebar";
 import { message} from 'antd';
 import 'antd/dist/antd.css';
+import {HiAnnotation} from "react-icons/hi";
 import type { T_Highlight, T_NewHighlight } from "../../src/types";
-
 import "./style/App.css";
 // import res from './res.json';
 import res from '../../result_v1.json';
@@ -29,7 +29,7 @@ type State = {
 
 var offset = 0;
 var hightlight_link = '';
-var uni_id;
+var uni_id = 1;
 
 // const searchParams = new URLSearchParams(location.search);
 // const url = searchParams.get("url") || DEFAULT_URL;
@@ -118,6 +118,15 @@ class Home extends Component {
       showPopup: false
     })
   }
+  onchangeShowCmt = () => {
+    if(this.state.showCommentBar){
+       this.closeCommentBox();
+    }
+    else{
+      this.openCommenrBox();
+    }
+
+  }
   closeCommentBox = () => {
     this.setState({
       showCommentBar: false
@@ -129,8 +138,9 @@ class Home extends Component {
         showCommentBar: true
       })
     }
-    else{ alert("Chưa có bình luận được thêm!");}
+    else{ message.error("Chưa có bình luận được thêm!");}
   }
+  onchangeShowCmt
    Addsuccess = (mess) => {
     message.success(mess);
   };
@@ -138,7 +148,9 @@ class Home extends Component {
       let query = new URLSearchParams(this.props.location.search);
       let origin_link = query.get('origin_link');
       let json_link = query.get('json_link');
-      uni_id = query.get('uni_id');
+      if(query.get('uni_id')){
+        uni_id = query.get('uni_id');
+      }
       if (query.has('hightlight_link')) {
         hightlight_link = query.get('hightlight_link');
       }
@@ -166,60 +178,66 @@ class Home extends Component {
       res: responseJson
     });
     const {res} = this.state;
-    
-    Object.keys(res.highlight).map((page, _) => {
-      Object.keys(res.highlight[page]).map((senIdx, _) => {
-        let highlight = res.highlight[page][senIdx];
-        if (!highlight.hasOwnProperty("boxes")) return;
-        highlight.boxes.map((box, _) => {
-        let hightlightset = {
-          page: parseInt(page.replace("page", "")) ,
-          position: [box[0], (828.5-box[1])+ box[3],box[0] + box[2],828.5-box[1] ],
-          content: " ",
-          color: [255, 255, 0],
-        }  
-        let highlight_elm = {
-          'position': {
-            'boundingRect': {
-              height: res.highlight[page]["height"],
-              width: res.highlight[page]["width"],
-              x1: box[0],
-              x2: box[0] + box[2],
-              y1: box[1],
-              y2: box[1] + box[3]
-            },
-            'pageNumber': parseInt(page.replace("page", "")) + 1,
-            'rects': [
-              {
+    if(res.hasOwnProperty('highlights_converted')){
+      this.setState({
+        highlights: res['highlights_converted']
+      });
+    }
+    else{
+      Object.keys(res.highlight).map((page, _) => {
+        Object.keys(res.highlight[page]).map((senIdx, _) => {
+          let highlight = res.highlight[page][senIdx];
+          if (!highlight.hasOwnProperty("boxes")) return;
+          highlight.boxes.map((box, _) => {
+          let hightlightset = {
+            page: parseInt(page.replace("page", "")) ,
+            position: [box[0], (828.5-box[1])+ box[3],box[0] + box[2],828.5-box[1] ],
+            content: " ",
+            color: [255, 255, 0],
+          }  
+          let highlight_elm = {
+            'position': {
+              'boundingRect': {
                 height: res.highlight[page]["height"],
                 width: res.highlight[page]["width"],
                 x1: box[0],
                 x2: box[0] + box[2],
                 y1: box[1],
                 y2: box[1] + box[3]
-              }
-              ] 
-            },
-            'content': {
-              'text': highlight['refs'][0][2],
-            },
-            'comment': {
-              'emoji': "",
-              'text': highlight['refs'][0][2]
-            },
-            'sentence': {
-              'number': senIdx
-            } 
-          }; // end highlight elm
-          highlights.push(highlight_elm);
-          hightlight_set.add(hightlightset);
-        }); // end boxes.map
-      }); // end object.keys
-    });
-    console.log(JSON.stringify(Array.from(hightlight_set)));
-    this.setState({
-      highlights: highlights
-    });
+              },
+              'pageNumber': parseInt(page.replace("page", "")) + 1,
+              'rects': [
+                {
+                  height: res.highlight[page]["height"],
+                  width: res.highlight[page]["width"],
+                  x1: box[0],
+                  x2: box[0] + box[2],
+                  y1: box[1],
+                  y2: box[1] + box[3]
+                }
+                ] 
+              },
+              'content': {
+                'text': highlight['refs'][0][2],
+              },
+              'comment': {
+                'emoji': "",
+                'text': highlight['refs'][0][2]
+              },
+              'sentence': {
+                'number': senIdx
+              } 
+            }; // end highlight elm
+            highlights.push(highlight_elm);
+            hightlight_set.add(hightlightset);
+          }); // end boxes.map
+        }); // end object.keys
+      });
+      //console.log(JSON.stringify(Array.from(hightlight_set)));
+      this.setState({
+        highlights: highlights
+      });
+    }
   }
   addComment(highlight: T_NewHighlight) {
     console.log("add coment");
@@ -238,7 +256,60 @@ class Home extends Component {
       res: res_t,
     });
 }
+ removeSource = (typeName) =>{
+  let uni_id_tmp = 1;
+  let privates = true; 
+  switch(typeName){
+     case 'Tài liệu nội bộ' : 
+      uni_id_tmp = uni_id ;
+      privates = true;
+      break;
+     case 'Tài liệu nội bộ trường khác': 
+     uni_id_tmp = 0 ;
+     privates = true;
+     break;
+     case 'Internet' : 
+     uni_id_tmp = 0 ;
+     privates = false;
+     break;
+  }
+  console.log(typeName+"type"+uni_id_tmp +"  privates :"+privates);
 
+  const  {highlights}  = this.state; 
+  let data = this.state.res   
+  let mySet = new Set();
+  data.res.s = data.res.s.filter((item,indexx)=>{
+    if(item['uni-id']==uni_id_tmp && (item.private == privates )){
+      return false;
+    }else{
+      return true;
+    }  
+  })
+  console.log("LENGHT"+ data.res.s.length);
+  data.res.s.map((element,indexz) => {
+     element.s.forEach( temp => {
+        mySet.add(temp[0]); 
+     });
+   }
+  );
+  const array = Array.from(mySet);
+  let newhl =  highlights.filter((item) =>{  
+    let num = item.sentence.number;
+    for( var i = 0 ;i< array.length;i++){
+       if(array[i]==num){
+         return true;
+       }
+    }
+  }); // update highlight
+  data["res"]["nSimilarSentences"] = mySet.size;
+  data["res"]["r"] = 100 * data["res"]["nSimilarSentences"] / data["res"]["nSentences"] ; 
+  this.Addsuccess("Loại bỏ nguồn thành công!");
+  this.setState({
+   highlights : newhl,
+   res : data,
+  }); 
+
+ }
  removeDoc = (index) => {
      const  {highlights}  = this.state; 
      let data = this.state.res   
@@ -270,14 +341,15 @@ class Home extends Component {
      }); 
   }
   clickRemove = (text,index) => {
+    console.log(text);
     const  {highlights}  = this.state;
-     let newhl =  highlights.filter(item => item.content.text !== text);
+     let newhl =  highlights.filter(item => item.content.text != text);
      let data = this.state.res
      let sentences = data.res.s;
      sentences.map((element,indexz) => {
         //console.log("before : " + element.r + " with:" + element.s.length );
         let mySet = new Set();
-        element.s = element.s.filter( item => item[8] !== text);
+        element.s = element.s.filter( item => item[0] != index);
         element.s.forEach( temp => {
            mySet.add(temp[0]); 
         });
@@ -295,7 +367,7 @@ class Home extends Component {
       res : data,
   }); 
 
-      thiss.Addsuccess("Loại bỏ đoạn thành công !");
+      this.Addsuccess("Loại bỏ đoạn thành công !");
 }
   clickLink = () => {
     this.setState({
@@ -328,17 +400,18 @@ class Home extends Component {
           url={url} highlights={highlights} res={res.highlight} clickRemove ={this.clickRemove} addCmt={this.addComment.bind(this)} />
         </div>
         {
-          showCommentBar ? <button style = {{height: "100vh",width: "1vw",}} onClick = { () => {this.closeCommentBox();}}  > &gt; &nbsp;  </button> : 
-          <button style = {{height: "100vh",width: "1vw",textAlign :"center" }} onClick = { () => {this.openCommenrBox()}}  >&lt;  </button>
+          // showCommentBar ? <button style = {{height: "100vh",width: "1vw",}} onClick = { () => {this.closeCommentBox();}}  > &gt; &nbsp;  </button> : 
+          // <button style = {{height: "100vh",width: "1vw",textAlign :"center" }} onClick = { () => {this.openCommenrBox()}}  >&lt;  </button>
         }
-        {showCommentBar ? (<div className="sidebar"
+        {showCommentBar ? (
+        <div className="sidebar"
           style={{
             height: "100vh",
             width: "15vw",
             overflowY: "scroll",
             position: "relative"
           }}>
-         <div className="title__comment" >Bình luận</div>  
+         <div className="title__comment" >  Bình luận <HiAnnotation/></div>  
         <ul className="sidebar__highlights">
         {this.state.res.comment.map((highlight, index) => (
           <li
@@ -372,6 +445,10 @@ class Home extends Component {
             position: "relative"
           }}
           clickRemoveDoc = {this.removeDoc.bind(this) }
+          clickRemoveSource = { this.removeSource.bind(this)}
+          showCommentBar = {this.state.showCommentBar}
+          onchangeShowCmt = {this.onchangeShowCmt.bind(this)}
+          hl = {this.state.highlights }
           uni_id={uni_id}
           data={res}
           ref={(ref)=>{this.sidebar=ref;}}

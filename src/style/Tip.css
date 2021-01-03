@@ -1,3 +1,4 @@
+
 .Tip__compact {
   cursor: pointer;
   background-color: #3d464d;
@@ -9,7 +10,8 @@
 
 .Tip__card {
   padding: 10px;
-  background: #fff;
+  background: #edeaab;
+  text-align: center;
   background-clip: padding-box;
   border: 1px solid #e8e8e8;
   border-radius: 4px;

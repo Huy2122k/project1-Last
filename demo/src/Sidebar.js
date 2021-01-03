@@ -8,6 +8,9 @@ import iconClosePopup from '../images/close.png';
 import iconDownArrow from '../images/down-arrow.png';
 import iconUpArrow from '../images/up-arrow.png';
 import {Legend,Donut} from 'britecharts-react';
+import {AiFillDelete ,AiOutlineClose ,AiOutlineCaretLeft,AiFillCaretRight,AiOutlineDownload} from "react-icons/ai";
+import { FcDownload} from "react-icons/fc";
+import { Button ,Menu} from 'antd';
 const donutData = require('./donutChart.fixtures').default;
 type T_ManuscriptHighlight = T_Highlight;
 type Props = {
@@ -25,11 +28,11 @@ function  with4(data) {
               (type.typeName == 'Tài liệu nội bộ' && element['uni-id'] == uni_id && element.private)
               || (type.typeName == 'Tài liệu nội bộ trường khác' && element['uni-id'] != uni_id && element.private)
               || (!element.private && type.typeName == 'Internet'))){*/
-  
+                  let abc = element.n.replace("txt", "pdf")
                   const obj ={
                       quantity : parseInt(element.r*100)/100  ,
                       percentage : parseInt(element.r*100)/100 ,
-                      name : element.n.replace("txt", "pdf"),
+                      name : `${abc.slice(0, 30).trim()}…`,
                       id : index+1
                   };
                       withResources.push(obj);              
@@ -39,32 +42,7 @@ function  with4(data) {
   }
   return withResources;
 };
-var with4Slices =[
-  {
-      quantity: 30,
-      percentage: 30,
-      name: 'React',
-      id: 1,
-  },
-  {
-      quantity: 20,
-      percentage: 20,
-      name: 'Ember',
-      id: 2,
-  },
-  {
-      quantity: 20,
-      percentage: 20,
-      name: 'Angular',
-      id: 3,
-  },
-  {
-      quantity: 20,
-      percentage: 20,
-      name: 'Backbone',
-      id: 4,
-  },
-];
+
 
 
 class Sidebar extends PureComponent{
@@ -140,7 +118,24 @@ class Sidebar extends PureComponent{
       });
     }
   }
+  // saveJS=(data,url) =>()=>{
+  //   fs.writeFile ('../outputJson/'+ url + "_result.json", JSON.stringify(data), function(err) {
+  //   if (err) throw err;
+  //   console.log('complete');
+  //   });
+  // }
+  exportToJsonFile =  (jsonData) => () => {
+    jsonData.highlights_converted = this.props.hl;
+    let dataStr = JSON.stringify(jsonData);
+    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
 
+    let exportFileDefaultName = 'data.json';
+
+    let linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+}
   showDetail=(index) =>()=>{
     let ele = document.getElementById('type-document-' + index)
     if (ele.classList.contains('show')) {
@@ -151,7 +146,7 @@ class Sidebar extends PureComponent{
       document.getElementById('img-down-' + index).src = iconUpArrow
     }
   }
-
+  
   nextSlide = () => {
     if (offset == arrayValue.s.length - 1) {
       offset = 0;
@@ -210,20 +205,25 @@ class Sidebar extends PureComponent{
   render(){
     console.log("render sidebar");
     const {uni_id,showPopUp,currentItem,showPopUpErr,valueClick,source} = this.state;
-    const { data, clickRemoveDoc } = this.props;
+    const { data, clickRemoveDoc ,clickRemoveSource,onchangeShowCmt,showCommentBar} = this.props;
     const legendMargin = {
       top: 10,
       bottom: 10,
       left: 0,
-      right: 30,
+      right: 0,
     };
     return(
       <div className="sidebar" style={{ width: "25vw" }}>
         <div className="content-sidebar">
-          <div className="title__sidebar">Tất cả các nguồn ({ data.res ? parseInt(data.res.r*100)/100 : '' }%)</div>
+          <div className="title__sidebar">
+          <Button type = "primary" size = "middle"   shape="circle" icon= {showCommentBar? (<AiFillCaretRight/>) : (<AiOutlineCaretLeft/>)  } onClick = {()=>{ onchangeShowCmt(); }} ></Button>
+            Tất cả các nguồn ({ data.res ? parseInt(data.res.r*100)/100 : '' }%)
+          <Button  size = "middle"   shape="circle" icon= {<FcDownload/> } onClick = { this.exportToJsonFile(data)}  ></Button>
+          </div>
           
           {/* { <Donut width={300} height='500'  data={with4(data)} highlightSliceById= {1} /> } */}
-          <div>
+           { (data.res.s.length!=0)?
+           (<div>
                   <Donut
                     data={with4(data)}
                     height={350}
@@ -238,20 +238,22 @@ class Sidebar extends PureComponent{
                   <Legend
                     data={with4(data)}
                     height={200}
-                    width={350}
+                    width={300}
                     margin={legendMargin}
                     highlightEntryById={1}
                   />
-                </div>
-
+                </div>) : ''
+                }
           <ul className="sidebar__highlights">
-            { source ? source.map((type, order) => (
+          { source ? source.map((type, order) => (
               <li key={order}>
-                <div className="title-type" onClick={this.showDetail(order)}>
+                <div className="title-type" >
+                <Button size={"default"} shape="circle"  icon={ <img className="img-fluid" id={'img-down-' + order} src={iconDownArrow}  /> } onClick={this.showDetail(order)} />
                   <span>{ type.typeName }</span>
-                  <img src={iconDownArrow} className="img-fluid" id={'img-down-' + order} />
+                  <Button size={"default"} shape="circle"  icon= {<AiFillDelete/> } onClick = {()=>{ source.splice(order,1);  clickRemoveSource(type.typeName); this.setState({ source : source  }) }} />
+                  
                 </div>
-                <ul
+                <Menu 
                   id={'type-document-' + order}
                   className="sidebar__highlights collapse">
                 {data.hasOwnProperty("res") && data.res.s ? data.res.s.map((element, index) => (
@@ -259,27 +261,26 @@ class Sidebar extends PureComponent{
                     (type.typeName == 'Tài liệu nội bộ' && element['uni-id'] == uni_id && element.private)
                     || (type.typeName == 'Tài liệu nội bộ trường khác' && element['uni-id'] != uni_id && element.private)
                     || (!element.private && type.typeName == 'Internet')) ?
-                  <li
+                  <Menu.Item 
                     key={index}
                     id={index}
-                    className="sidebar__highlight"
-                  >
-                    <div className="item_document_org clearfix"onClick={this.handleClick(element, index)} >
-                      <div className="float-left" >
+                    onClick={this.handleClick(element, index)}
+                  > 
+                    {/* <div className="item_document_org clearfix"onClick={this.handleClick(element, index)} > */}
+                    <div style ={{display : "flex" , justifyContent : "space-between" , alignItems : "center" }} >
+                      <div style = {{ textOverflow: "ellipsis" , overflow: "hidden" }} >
+                       <strong>{parseInt(element.r*100)/100}% </strong>
                         {element.n.replace("txt", "pdf")}
                       </div>
-                      <div className="float-right">
-                        <strong>{parseInt
-                        (element.r*100)/100} %</strong>
-                      </div>
+                      <Button size={"default"}  shape="circle" icon= {<AiOutlineClose/> } onClick = {()=>{ clickRemoveDoc(index); }} />
+                      {/* <button className="float-right" onClick = {()=>{ clickRemoveDoc(index); }}  > xóa </button> */}
                     </div>
-                    <button onClick = {()=>{ clickRemoveDoc(index); }}  > xóa </button>
-                  </li>
+                  </Menu.Item>
                  
                   : ''
                   
                 )) : ''}
-                </ul>
+                </Menu>
               </li>
             )) : ''}
           </ul>

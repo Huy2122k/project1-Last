@@ -5,12 +5,11 @@ import Sidebar from './Sidebar';
 import About from './About';
 import App from './App';
 import Home from "./Home";
-
 const SetApp = () => (
     <Router>
         <div>
             <Switch>
-                <Route exact path="/" component={App} />
+                <Route exact path="/" component={About} />
                 <Route path="/About" component={About} />
             </Switch>
         </div>

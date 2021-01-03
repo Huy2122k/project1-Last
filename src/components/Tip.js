@@ -3,6 +3,8 @@
 import React, { Component } from "react";
 
 import "../style/Tip.css";
+import { Button } from 'antd';
+import {AiOutlineComment} from "react-icons/ai"
 
 type State = {
   compact: boolean,
@@ -42,15 +44,20 @@ class Tip extends Component<Props, State> {
     return (
       <div className="Tip">
         {compact ? (
-          <div
-            className="Tip__compact"
+          /*<div
+            //className="Tip__compact"
             onClick={() => {
-              onOpen();
+              //onOpen();
               this.setState({ compact: false });
             }}
           >
             Thêm bình luận
-          </div>
+          </div>*/
+          <Button type="primary" style={ {backgroundColor : "green"} } icon={<AiOutlineComment/> } onClick={() => {
+            //onOpen();
+            this.setState({ compact: false });
+          }} 
+          >Thêm bình luận</Button>
         ) : (
           <form
             className="Tip__card"
@@ -58,11 +65,11 @@ class Tip extends Component<Props, State> {
               event.preventDefault();
               onConfirm({ text, emoji });
             }}
-          >
+          > <p style={{color : "#5c5c55", fontSize: " 16px" }} >Thêm bình luận </p>
             <div>
               <textarea
                 width="100%"
-                placeholder="bình luận..."
+                placeholder="nội dung..."
                 autoFocus
                 value={text}
                 onChange={event => this.setState({ text: event.target.value })}
@@ -90,7 +97,8 @@ class Tip extends Component<Props, State> {
               </div> */}
             </div>
             <div>
-              <input type="submit" value="Thêm bình luận" />
+              <Button type="primary" htmlType="submit"> Thêm </Button>
+              
             </div>
           </form>
         )}

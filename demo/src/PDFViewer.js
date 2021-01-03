@@ -11,7 +11,9 @@ import {
 } from "../../src";
 import Spinner from "./Spinner";
 import type { T_Highlight, T_NewHighlight } from "../../src/types"
-
+//import {DeleteOutlined} from '@ant-design/icons';
+import { Button ,Popconfirm } from 'antd';
+import {AiFillDelete} from "react-icons/ai"
 const getNextId = () => String(Math.random()).slice(2);
 
 const parseIdFromHash = () => location.hash.slice("#highlight-".length);
@@ -20,12 +22,14 @@ const resetHash = () => {
     location.hash = "";
 };
 
-const HighlightPopup = ({ sentence ,content ,clickRemove}) =>
-(
-    <div className="Highlight__popup"  style={{cursor:'pointer'}}  onClick = {()=>{  clickRemove(content.text,sentence.number); } }>
-        Loại bỏ đoạn trùng lặp
-   </div>
-  )
+const HighlightPopup = ({ sentence ,content ,clickRemove,onRemove}) =>
+(   
+    <Popconfirm title="Bạn có chắc chắn loại bỏ?" okText="Có" cancelText="Không">
+        <Button type="primary"  icon={<AiFillDelete/> } onClick = {()=>{  clickRemove(content.text,sentence.number);  onRemove(); } } danger >
+            Loại bỏ đoạn trùng lặp
+        </Button>
+    </Popconfirm>
+)
  
 
 export default class PDFViewer extends Component {
@@ -112,8 +116,8 @@ export default class PDFViewer extends Component {
                                 <Tip
                                     onOpen={transformSelection}
                                     onConfirm={comment => {
+                                        console.log("OK")
                                         addCmt({ content, position, comment });
-
                                         hideTipAndSelection();
                                     }}
                                 />
@@ -151,7 +155,7 @@ export default class PDFViewer extends Component {
                                 );
                             return (
                                 <Popup
-                                    popupContent={<HighlightPopup {...highlight} clickRemove={clickRemove} /> }
+                                    popupContent={<HighlightPopup {...highlight} clickRemove={clickRemove} onRemove={hideTip} /> }
                                     onMouseOver={popupContent =>
                                           setTip(highlight, highlight => popupContent)
                                     }

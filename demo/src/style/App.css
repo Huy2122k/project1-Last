@@ -37,25 +37,30 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 30px;
+  padding: 10px 20px;
   cursor: pointer;
-  background-color: #fbfbfb;
+  background-color: #f5fafc;
   border-bottom: 1px solid #eeeeee;
+  border-top:  1px solid #eeeeee;
 }
 
 .title__sidebar {
   color: #fff;
-  padding: 16px 0;
+  padding: 10px 10px;
   font-weight: bold;
-  background-color: #c20d2e;
-  text-align: center;
+  background-color: #9189ff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .title__comment {
   color: #fff;
-  padding: 16px 0;
+  padding: 15px 10px;
   font-weight: bold;
-  background-color: #c20d2e;
-  text-align: center;
+  background-color: #9189ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .highlight__location {
