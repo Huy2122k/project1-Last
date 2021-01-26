@@ -6,12 +6,16 @@ body {
   background-color: #ffffff;
   color: #fff;
 }
-
+.switch{
+  padding-left: 10px;
+  background: yellowgreen;
+  border-radius: 15px
+}
 .sidebar {
   overflow: auto;
   height: 100vh;
   border-left: 1px solid #eee;
-  color: #888888;
+  color: #313030;
   background: #ffffff;
 }
 
@@ -42,6 +46,9 @@ body {
   background-color: #f5fafc;
   border-bottom: 1px solid #eeeeee;
   border-top:  1px solid #eeeeee;
+  background: yellowgreen;
+  border-radius: 15px
+
 }
 
 .title__sidebar {
@@ -131,6 +138,23 @@ body {
   left: 15%;
   right: 30%;
 }
+footer {
+  background: #16222A;
+  background: -webkit-linear-gradient(59deg, #3A6073, #16222A);
+}
+
+
+
+.copy {
+  font-size: 12px;
+  padding: 15px;
+  border-top: 1px solid #FFFFFF;
+}
+
+.footer-middle {
+  padding-top: 2em;
+  color: white;
+}
 
 .backpop{
   background: rgba(0,0,0,0.5);
@@ -195,7 +219,7 @@ body {
   padding: 10px 20px;
   color: #000;
   font-size: 14px;
-  height: 88px;
+  height: auto;
   overflow: hidden;
 }
 

@@ -1,17 +1,16 @@
-import {Donut} from  "./Donut";
-import {Legend} from "../legend/Legend";
-const donutData = require('./donutChart.fixtures.js').default;
-  const withResponsiveness = require('../helpers/withResponsiveness.js').default;
-  const ResponsiveContainer = require('../helpers/responsiveContainer.js').default;
-   const ResponsiveDonut = withResponsiveness(Donut);
-   const ResponsiveLegend = withResponsiveness(Legend);
+import React,{ PureComponent } from "react";
+import {Donut , Legend} from 'britecharts-react';
+import {withResponsiveness , ResponsiveContainer}  from 'britecharts-react';
+const ResponsiveDonut = withResponsiveness(Donut);
+const ResponsiveLegend = withResponsiveness(Legend);
 
-export default class LegendDonut extends React.PureComponent {
-
+ class LegendDonut extends PureComponent {
     constructor(props) {
       super(props);
 
-      this.state = {highlightedSlice: null};
+      this.state = {
+        highlightedSlice: 1,
+      };
     }
 
     _handleMouseOver(data) {
@@ -21,12 +20,11 @@ export default class LegendDonut extends React.PureComponent {
     }
 
     _handleMouseOut() {
-      this.setState({
-        highlightedSlice: 99999
-      });
+       console.log("mouseout");
     }
 
     render() {
+      const {data,data2} = this.props;
       const legendMargin = {
         top: 10,
         bottom: 10,
@@ -35,24 +33,24 @@ export default class LegendDonut extends React.PureComponent {
       };
 
       return (
-          <ResponsiveContainer
+          <ResponsiveContainer 
             render={
               ({width}) =>
                 <div>
                   <Donut
-                    data={donutData.with4Slices()}
+                    data={data}
                     height={width}
                     width={width}
                     externalRadius={width / 2.5}
                     internalRadius={width / 5}
-                    isAnimated={false}
+                    isAnimated={true}
                     highlightSliceById={this.state.highlightedSlice}
-                    customMouseOver={this._handleMouseOver.bind(this)}
-                    customMouseOut={this._handleMouseOut.bind(this)}
+                    /*customMouseOver={this._handleMouseOver.bind(this)}
+                    */customMouseOut={this._handleMouseOut.bind(this)}
                   />
                   <Legend
-                    data={donutData.with4Slices()}
-                    height={200}
+                    data={data2}
+                    height={250}
                     width={width}
                     margin={legendMargin}
                     highlightEntryById={this.state.highlightedSlice}
@@ -65,4 +63,4 @@ export default class LegendDonut extends React.PureComponent {
     }
   }
 
-  <LegendDonut />
+  export default LegendDonut;

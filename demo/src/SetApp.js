@@ -5,12 +5,13 @@ import Sidebar from './Sidebar';
 import About from './About';
 import App from './App';
 import Home from "./Home";
+import indexz from '/Users/huy/Documents/project1/indexz';
 const SetApp = () => (
     <Router>
         <div>
             <Switch>
                 <Route exact path="/" component={About} />
-                <Route path="/About" component={About} />
+                <Route path="/About" component={indexz } />
             </Switch>
         </div>
     </Router>

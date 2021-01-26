@@ -8,9 +8,10 @@ import iconClosePopup from '../images/close.png';
 import iconDownArrow from '../images/down-arrow.png';
 import iconUpArrow from '../images/up-arrow.png';
 import {Legend,Donut} from 'britecharts-react';
+import LegendDonut from './LegendDonut';
 import {AiFillDelete ,AiOutlineClose ,AiOutlineCaretLeft,AiFillCaretRight,AiOutlineDownload} from "react-icons/ai";
 import { FcDownload} from "react-icons/fc";
-import { Button ,Menu} from 'antd';
+import { Button ,Menu ,Switch} from 'antd';
 const donutData = require('./donutChart.fixtures').default;
 type T_ManuscriptHighlight = T_Highlight;
 type Props = {
@@ -20,19 +21,15 @@ type Props = {
 
 var offset = -1;
 var arrayValue;
-function  with4(data) {
+function  with4(data,lenghtText) {
   const withResources = [];
    if(data.hasOwnProperty("res") && data.res.s) {
       data.res.s.map((element, index) => {
-          /*if(element.r && (
-              (type.typeName == 'Tài liệu nội bộ' && element['uni-id'] == uni_id && element.private)
-              || (type.typeName == 'Tài liệu nội bộ trường khác' && element['uni-id'] != uni_id && element.private)
-              || (!element.private && type.typeName == 'Internet'))){*/
                   let abc = element.n.replace("txt", "pdf")
                   const obj ={
                       quantity : parseInt(element.r*100)/100  ,
                       percentage : parseInt(element.r*100)/100 ,
-                      name : `${abc.slice(0, 30).trim()}…`,
+                      name : `${abc.slice(0, lenghtText).trim()}…`,
                       id : index+1
                   };
                       withResources.push(obj);              
@@ -53,6 +50,7 @@ class Sidebar extends PureComponent{
       data: props.data,
       uni_id: props.uni_id,
       currentItem:{},
+      disabled : false,
       showPopUp:false,
       showPopUpErr:false,
       source: [
@@ -125,16 +123,16 @@ class Sidebar extends PureComponent{
   //   });
   // }
   exportToJsonFile =  (jsonData) => () => {
+    console.log("start");
     jsonData.highlights_converted = this.props.hl;
     let dataStr = JSON.stringify(jsonData);
     let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-
     let exportFileDefaultName = 'data.json';
-
     let linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
+    console.log("done");
 }
   showDetail=(index) =>()=>{
     let ele = document.getElementById('type-document-' + index)
@@ -167,7 +165,9 @@ class Sidebar extends PureComponent{
         showPopUpErr: true,
     })
   }
-
+  handleDisabledChange = disabled => {
+    this.setState({ disabled });
+  };
   preSlide = () => {
     if (offset == 0) {
       offset = arrayValue.s.length - 1;
@@ -204,7 +204,7 @@ class Sidebar extends PureComponent{
 
   render(){
     console.log("render sidebar");
-    const {uni_id,showPopUp,currentItem,showPopUpErr,valueClick,source} = this.state;
+    const {uni_id,showPopUp,currentItem,showPopUpErr,valueClick,source,disabled } = this.state;
     const { data, clickRemoveDoc ,clickRemoveSource,onchangeShowCmt,showCommentBar} = this.props;
     const legendMargin = {
       top: 10,
@@ -218,32 +218,13 @@ class Sidebar extends PureComponent{
           <div className="title__sidebar">
           <Button type = "primary" size = "middle"   shape="circle" icon= {showCommentBar? (<AiFillCaretRight/>) : (<AiOutlineCaretLeft/>)  } onClick = {()=>{ onchangeShowCmt(); }} ></Button>
             Tất cả các nguồn ({ data.res ? parseInt(data.res.r*100)/100 : '' }%)
-          <Button  size = "middle"   shape="circle" icon= {<FcDownload/> } onClick = { this.exportToJsonFile(data)}  ></Button>
+          <Button  size = "middle"  shape="circle" icon= {<FcDownload/> } onClick = { this.exportToJsonFile(data)}  ></Button>
           </div>
-          
+          <div className ="switch" ><Switch  size="small" checked={disabled} onChange={this.handleDisabledChange} /> Hiện đồ thị </div> 
           {/* { <Donut width={300} height='500'  data={with4(data)} highlightSliceById= {1} /> } */}
-           { (data.res.s.length!=0)?
-           (<div>
-                  <Donut
-                    data={with4(data)}
-                    height={350}
-                    width={350}
-                    externalRadius={350 / 2.5}
-                    internalRadius={350 / 5}
-                    isAnimated={true}
-                    highlightSliceById={1}
-                    //customMouseOver={this._handleMouseOver.bind(this)}
-                    //customMouseOut={this._handleMouseOut.bind(this)}
-                  />
-                  <Legend
-                    data={with4(data)}
-                    height={200}
-                    width={300}
-                    margin={legendMargin}
-                    highlightEntryById={1}
-                  />
-                </div>) : ''
-                }
+          {data.res ?
+           ( disabled? (<LegendDonut data = {  with4(data,30)}  data2 ={  with4(data,20)} /> ):'') : <div> Không có tài liệu trùng lặp hoặc sai đường dẫn JSON </div> 
+           }
           <ul className="sidebar__highlights">
           { source ? source.map((type, order) => (
               <li key={order}>
@@ -272,14 +253,14 @@ class Sidebar extends PureComponent{
                        <strong>{parseInt(element.r*100)/100}% </strong>
                         {element.n.replace("txt", "pdf")}
                       </div>
-                      <Button size={"default"}  shape="circle" icon= {<AiOutlineClose/> } onClick = {()=>{ clickRemoveDoc(index); }} />
+                      <Button size={"default"}  shape="circle" icon= {<AiOutlineClose/> } onClick = {()=>{  clickRemoveDoc(index); this.closePopup(); }} />
                       {/* <button className="float-right" onClick = {()=>{ clickRemoveDoc(index); }}  > xóa </button> */}
                     </div>
                   </Menu.Item>
                  
                   : ''
                   
-                )) : ''}
+                )) : (<div>Không có tài liệu trùng lặp</div>)}
                 </Menu>
               </li>
             )) : ''}

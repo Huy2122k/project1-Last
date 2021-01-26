@@ -18,11 +18,11 @@ html
   .textLayer
   > div:not(.PdfHighlighter__highlight-layer):not(.Highlight):not(.Highlight-emoji) {
   opacity: 1;
-  mix-blend-mode: multiply;
+  /* mix-blend-mode: multiply; */
 }
 
 .textLayer ::selection {
-  background: rgba(252, 232, 151, 1);
+  background: rgb(114 255 170 / 79%);
   mix-blend-mode: multiply;
 }
 

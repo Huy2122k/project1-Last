@@ -52,6 +52,7 @@ class Home extends Component {
       showCommentBar : false,
       url: String,
       res: JSON,
+      status: true, 
     }
     this.state.State;
   }
@@ -146,37 +147,50 @@ class Home extends Component {
   };
   componentWillMount () {
       let query = new URLSearchParams(this.props.location.search);
-      let origin_link = query.get('origin_link');
-      let json_link = query.get('json_link');
-      if(query.get('uni_id')){
-        uni_id = query.get('uni_id');
+      let Pdf_url = query.get('Pdf_url');
+      let Json_url= query.get('Json_url');
+      if(query.has('DHBK')&&(query.get('DHBK')=='on')){
+        uni_id = 1;
+      }
+      else{
+        uni_id = 0;
       }
       if (query.has('hightlight_link')) {
         hightlight_link = query.get('hightlight_link');
       }
 
       this.setState({
-        url: "20132320_Tran_Thi_Dieu_Linh_1528176806088.pdf"  //origin_link
+        url: Pdf_url //"20132320_Tran_Thi_Dieu_Linh_1528176806088.pdf"  //origin_link
       });
       
       const preview = this.preview;
-      fetch("http://202.191.56.254:8000/log-check/2020.11.08.16.15.21SCMCGQ3Z/result.json")
-      
+      console.log(Json_url);
+      console.log(uni_id);
+      fetch(Json_url /*"http://202.191.56.254:8000/log-check/2020.11.08.16.15.21SCMCGQ3Z/result.json"*/)
       .then((Response) => Response.json())
       .then((responseJson) => {
         preview(responseJson);
       })
       .catch(function (error) {
+
         console.log(error);
       });
   }
   // init highlights
      preview = async (responseJson) => {
-      let highlights = [];
-      let hightlight_set= new Set();
-    this.setState({
-      res: responseJson
-    });
+    let highlights = [];
+    let hightlight_set= new Set();
+    if(responseJson){
+      this.setState({
+        res: responseJson
+      });
+    }else{
+      this.setState({
+        highlight : [],
+        res: {}
+      });
+      return;
+    }
     const {res} = this.state;
     if(res.hasOwnProperty('highlights_converted')){
       this.setState({
@@ -233,7 +247,7 @@ class Home extends Component {
           }); // end boxes.map
         }); // end object.keys
       });
-      //console.log(JSON.stringify(Array.from(hightlight_set)));
+      console.log(JSON.stringify(Array.from(hightlight_set)));
       this.setState({
         highlights: highlights
       });
@@ -380,13 +394,13 @@ class Home extends Component {
       showPopUpErr: false,
     })
   }
-
   render() {
     console.log("render parent");
-    const { highlights, contentPopup, dataSameArray, showPopup, showPopUpErr, url, res, showCommentBar } = this.state;
+    const { highlights, contentPopup, dataSameArray, showPopup, showPopUpErr, url, res, showCommentBar ,status} = this.state;
     //const contenComnent = 
     return (
-      <div className="Home" style={{ display: "flex", height: "100vh" }}>
+    <div>
+    <div className="Home" style={{ display: "flex", height: "100vh" }}>
         <div
           style={{
             height: "100vh",
@@ -397,7 +411,7 @@ class Home extends Component {
         >
           <PDFViewer  
           onPressSentence={this.onPressSentence} ref={(ref)=>{this.viewer=ref;}}
-          url={url} highlights={highlights} res={res.highlight} clickRemove ={this.clickRemove} addCmt={this.addComment.bind(this)} />
+          url={url} highlights={highlights} res={res.highlight} clickRemove ={this.clickRemove} addCmt={this.addComment.bind(this)} /> 
         </div>
         {
           // showCommentBar ? <button style = {{height: "100vh",width: "1vw",}} onClick = { () => {this.closeCommentBox();}}  > &gt; &nbsp;  </button> : 
@@ -513,8 +527,22 @@ class Home extends Component {
             </div>
           </div>
         : '' }
+      </div> 
+      <footer class="mainfooter" role="contentinfo">
+      <div class="footer-middle">
+      <div class="container">
+      
+      <div class="row">
+        <div class="col-md-12 copy">
+          <p class="text-center">&copy; Copyright 2020 - ĐHBKHN.  All rights reserved.</p>
+        </div>
       </div>
-
+    
+    
+      </div>
+      </div>
+    </footer>
+    </div>
     );
     
   }

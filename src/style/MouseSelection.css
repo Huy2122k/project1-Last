@@ -1,8 +1,8 @@
 .MouseSelection {
   position: absolute;
   border: 1px dashed #333;
-  background: rgba(252, 232, 151, 1);
-  mix-blend-mode: multiply;
+  background: rgb(114 255 170 / 79%);
+  /* mix-blend-mode: multiply; */
 }
 /* Internet Explorer support method */
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {

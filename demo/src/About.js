@@ -9,6 +9,7 @@ class About extends React.Component {
             <div className="About">
                 Day la trang gioi thieu nhe
             </div>
+
         );
     }
 }
