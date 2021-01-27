@@ -1,14 +1,16 @@
 
 ## Cài đặt và sử dụng :
 `npm install`
-`npm start`
-Truy cập http://localhost:3000/index     
+
+`npm start` 
+
+Truy cập http://localhost:3000/index      
 Nhập vào pdf_url và JSON_URL , tích chọn "Trường ĐHBKHN?" nếu là tài liệu nội bộ 
 
 
 #### FAQ
 
-## react-pdf-highlighter
+## [`react-pdf-highlighter`](https://github.com/agentcooper/react-pdf-highlighter)
 
 `react-pdf-highlighter` is a [React](https://reactjs.org/) library that provides annotation experience for PDF documents on web. It is built on top of PDF.js by Mozilla. Text and rectangular highlights are supported. Highlight
 data format is independent of the viewport, making it suitable for saving on the
