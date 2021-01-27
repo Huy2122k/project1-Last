@@ -1,30 +1,18 @@
+
+## Cài đặt và sử dụng :
+`npm install`
+`npm start`
+Truy cập http://localhost:3000/index     
+Nhập vào pdf_url và JSON_URL , tích chọn "Trường ĐHBKHN?" nếu là tài liệu nội bộ 
+
+
+#### FAQ
+
 ## react-pdf-highlighter
 
 `react-pdf-highlighter` is a [React](https://reactjs.org/) library that provides annotation experience for PDF documents on web. It is built on top of PDF.js by Mozilla. Text and rectangular highlights are supported. Highlight
 data format is independent of the viewport, making it suitable for saving on the
 server.
-
-### Demo
-
-For online demo check https://agentcooper.github.io/react-pdf-highlighter/.
-
-To run the demo app locally:
-
-```
-npm install
-npm start
-```
-
-While docs are in progress, feel free to check the source annotated with Flow
-type signatures.
-
-### Installation
-
-`npm install react-pdf-highlighter`
-
-See
-[`demo/src/App.js`](https://github.com/agentcooper/react-pdf-highlighter/blob/master/demo/src/App.js)
-for React component API example.
 
 ### Prior art
 
@@ -47,19 +35,6 @@ See also:
 * https://github.com/instructure/pdf-annotate.js/
 * https://blogs.dropbox.com/tech/2016/11/annotations-on-document-previews/
 
-### FAQ
-
-##### Can I get a new PDF with the highlights embedded into the document?
-
-No, but [pdf-annotation-service](https://github.com/agentcooper/pdf-annotation-service) might be helpful for you.
-
-##### Wasn't this named react-pdf-annotator at some point?
-
-Yes, but people from https://www.pdfannotator.com/ asked me to rename, since [they have a trademark for PDF Annotator](https://www.pdfannotator.com/en/help/infodisclaimer).
-
-##### I'm trying the demo with my PDF and it is not loading!
-
-Please check the [CORS headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) on your url. It is required for the cross-domain request.
 
 ### Compatibility
 

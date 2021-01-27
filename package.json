@@ -3,6 +3,7 @@
   "version": "2.2.0",
   "description": "Set of React components for PDF annotation",
   "main": "lib/index.js",
+  "homepage": "https://huy2122k.github.io/project1-Last/",
   "scripts": {
     "build": "nwb build-react-component",
     "copy-flow": "flow-copy-source src lib",
@@ -37,7 +38,7 @@
   "devDependencies": {
     "flow-bin": "0.73.0",
     "flow-copy-source": "^1.1.0",
-    "gh-pages": "0.11.0",
+    "gh-pages": "^0.11.0",
     "husky": "0.11.9",
     "nwb": "0.21.0",
     "prettier": "^1.19.1",
@@ -58,13 +59,5 @@
   ],
   "directories": {
     "lib": "lib"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/agentcooper/react-pdf-highlighter.git"
-  },
-  "bugs": {
-    "url": "https://github.com/agentcooper/react-pdf-highlighter/issues"
-  },
-  "homepage": "https://github.com/agentcooper/react-pdf-highlighter#readme"
+  }
 }
