@@ -52,8 +52,7 @@ class Home extends Component {
       showCommentBar : false,
       url: String,
       res: JSON,
-      status: true,
-      sourcePercent : [],
+      status: true, 
     }
     this.state.State;
   }
@@ -248,41 +247,8 @@ class Home extends Component {
           }); // end boxes.map
         }); // end object.keys
       });
-      console.log(JSON.stringify(Array.from(hightlight_set))); 
-  
-      //caculate docs percent
-     let sentences = res.res.s;  
-     let sourcePercent=[0,0,0];
-     let mySet0 = new Set();
-     let mySet1 = new Set();
-     let mySet2 = new Set();
-     sentences.map((element,indexz) => {
-        if(element['uni-id'] == uni_id && element.private){ //tai lieu noi bo
-             element.s.forEach( temp => {
-                mySet0.add(temp[0]); 
-             });
-        }
-        else if( element['uni-id'] != uni_id && element.private){ // noi bo truong khac
-          element.s.forEach( temp => {
-            mySet1.add(temp[0]); 
-         });
-        }else if(!element.private){     //internet
-          element.s.forEach( temp => {
-            mySet2.add(temp[0]); 
-         });
-        }  
-      }
-     )
-     let countN = res["res"]["nSentences"];
-     console.log("N"+countN);
-      sourcePercent[0]= mySet0.size/countN;
-      sourcePercent[1]= mySet1.size/countN;
-      sourcePercent[2]= mySet2.size/countN;
-      for(let i=0;i<3;i++){
-        console.log(i+"  "+sourcePercent[i]);
-      }
+      console.log(JSON.stringify(Array.from(hightlight_set)));
       this.setState({
-        sourcePercent : sourcePercent,
         highlights: highlights
       });
     }
@@ -430,7 +396,7 @@ class Home extends Component {
   }
   render() {
     console.log("render parent");
-    const { highlights, contentPopup, dataSameArray, showPopup, showPopUpErr, url, res, showCommentBar ,status, sourcePercent} = this.state;
+    const { highlights, contentPopup, dataSameArray, showPopup, showPopUpErr, url, res, showCommentBar ,status} = this.state;
     //const contenComnent = 
     return (
     <div>
@@ -496,7 +462,6 @@ class Home extends Component {
           clickRemoveSource = { this.removeSource.bind(this)}
           showCommentBar = {this.state.showCommentBar}
           onchangeShowCmt = {this.onchangeShowCmt.bind(this)}
-          percentSource = {sourcePercent}
           hl = {this.state.highlights }
           uni_id={uni_id}
           data={res}
@@ -526,7 +491,7 @@ class Home extends Component {
           <div className="content_popup">
             {contentPopup.text}
           </div>
-        </div> : ''}
+        </div> : ''};
         { showPopUpErr ?
             <div className="backpop fixed">
                 <div className="item_document_popup_2" id="document-popup-sidebar">

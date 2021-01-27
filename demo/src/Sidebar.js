@@ -205,7 +205,7 @@ class Sidebar extends PureComponent{
   render(){
     console.log("render sidebar");
     const {uni_id,showPopUp,currentItem,showPopUpErr,valueClick,source,disabled } = this.state;
-    const { data, clickRemoveDoc ,clickRemoveSource,onchangeShowCmt,showCommentBar,percentSource} = this.props;
+    const { data, clickRemoveDoc ,clickRemoveSource,onchangeShowCmt,showCommentBar} = this.props;
     const legendMargin = {
       top: 10,
       bottom: 10,
@@ -230,7 +230,7 @@ class Sidebar extends PureComponent{
               <li key={order}>
                 <div className="title-type" >
                 <Button size={"default"} shape="circle"  icon={ <img className="img-fluid" id={'img-down-' + order} src={iconDownArrow}  /> } onClick={this.showDetail(order)} />
-                  <span>{ type.typeName }({(percentSource[order]*100).toFixed(2)}%)</span>
+                  <span>{ type.typeName }</span>
                   <Button size={"default"} shape="circle"  icon= {<AiFillDelete/> } onClick = {()=>{ source.splice(order,1);  clickRemoveSource(type.typeName); this.setState({ source : source  }) }} />
                   
                 </div>
